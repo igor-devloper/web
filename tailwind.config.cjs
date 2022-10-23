@@ -3,8 +3,12 @@ module.exports = {
   content: [
     './src/**/*.tsx',
     './index.html',
+    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
+    fontFamily: {
+      sans: ['Inter', 'Sans-serif']
+    },
     extend: {
       backgroundImage: {
         fundo: "url('/Fundo.png')",
@@ -13,5 +17,8 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ]
+
 }

@@ -1,70 +1,82 @@
-import { Logo } from './components/logo'
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import './styles/main.css'
-import { MagnifyingGlassPlus } from "phosphor-react";
+import * as Dialog from '@radix-ui/react-dialog';
+import { Logo } from './components/Logo'
+import { GameBanner } from './components/GameBanner';
+import { CreateAdBanner } from './components/CreateAdBanner';
+import { CreateAdModal } from './components/CreateAdModal';
+import { GooglePlayLogo } from 'phosphor-react';
+import FlatList from 'flatlist-react';
+import { GameBannerResp } from './components/GameBannerResp';
+import { CreateAdBannerResp } from './components/CreateAdBannerResp';
+
+interface Attraction {
+  description: string;
+  bannerUrl: string,
+  id: string,
+  title: string,
+  _count: {
+    ads: number
+  }
+}
 
 function App() {
+  const [attractions, setAttractions] = useState<Attraction[]>([])
+
+  useEffect(() => {
+    axios('http://localhost:5000/attractions').then(response => {
+      setAttractions(response.data);
+    })
+  }, [])
+
   return (
-    <div className='max-w-[1344px] mx-auto flex flex-col items-center my-20 '>
+    // <--------site full-------->
+    <div className='max-w-[1600px] mx-auto flex flex-col items-center my-20 '>
       <Logo />
-      <h1 className='text-5xl text-white font-black mt-10'>
-        Seu <span className='text-transparent bg-gradient bg-clip-text'>duo</span> está aqui.
+      <h1 className='text-[1.5rem] lg:text-5xl lg:text-white font-black text-white lg:mt-10'>
+        Seu <span className='text-transparent bg-gradient bg-clip-text'>guia</span> digital está aqui.
       </h1>
-
-      {/* <--Lista de Jogos----> */}
-
-      <div className='grid grid-cols-6 gap-6 mt-16'>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src="/game-1.png" alt="" />
-          <div className='w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0'>
-            <strong className='text-white font-bold block'>League of legends</strong>
-            <p className='text-zinc-300 text-sm block'>4 anúncios</p>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src="/game-2.png" alt="" />
-          <div className='w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0'>
-            <strong className='text-white font-bold block'>Dota 2</strong>
-            <p className='text-zinc-300 text-sm block'>4 anúncios</p>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src="/game-3.png" alt="" />
-          <div className='w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0'>
-            <strong className='text-white font-bold block'>Counter Strike</strong>
-            <p className='text-zinc-300 text-sm block'>4 anúncios</p>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src="/game-4.png" alt="" />
-          <div className='w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0'>
-            <strong className='text-white font-bold block'>Apex Legends</strong>
-            <p className='text-zinc-300 text-sm block'>4 anúncios</p>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src="/game-5.png" alt="" />
-          <div className='w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0'>
-            <strong className='text-white font-bold block'>Fortinete</strong>
-            <p className='text-zinc-300 text-sm block'>4 anúncios</p>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src="/game-6.png" alt="" />
-          <div className='w-full p6t-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0'>
-            <strong className='text-white font-bold block'>World of Warcraft</strong>
-            <p className='text-zinc-300 text-sm block'>4 anúncios</p>
-          </div>
-        </a>
+      <div className='grid-cols-6 gap-6 mt-16 hidden lg:grid'>
+        {attractions.map(attraction => {
+          return (
+            <GameBanner
+              key={attraction.id}
+              BannerUrl={attraction.bannerUrl}
+              description={attraction.description}
+              title={attraction.title}
+              adsCount={attraction._count.ads}
+            />
+          )
+        })}
       </div>
-      <div className='self-stretch bg-[#2A2634]  px-8 py-6  mt-8 rounded-lg overflow-hidden border-t-4 border-violet-600 flex justify-between items-center'>
-        <div>
-          <strong className='font-black text-2xl text-white leading-10'>Não encontrou seu duo?</strong>
-          <p className='text-zinc-400 mt-1'>Publique um anúncio para encontrar novos players!</p>
+      <div className='grid lg:hidden grid-rows-6 mt-4 overflow-hidden gap-2 max-w-[300px] max-h-[1000px]'>
+        {attractions.map(attraction => {
+          return (
+            <GameBannerResp
+              key={attraction.id}
+              BannerUrl={attraction.bannerUrl}
+              adsCount={attraction._count.ads}
+              title={attraction.title}
+              description={attraction.description}
+            />
+          )
+        })}
+      </div>
+      <Dialog.Root>
+        <div className='self-stretch hidden lg:grid overflow-hidden' >
+          <CreateAdBanner />
         </div>
-        <button className='py-3 px-4 bg-violet-500 rounded text-white flex gap-1'>
-          <MagnifyingGlassPlus size={24} weight="light" />
-          Publicar anuncio
-        </button>
+        <div className='lg:hidden'>
+          <CreateAdBannerResp />
+        </div>
+        <div>
+          <CreateAdModal />
+        </div>
+      </Dialog.Root>
+      <div className='flex  items-center mt-8 bg-[#2A2634] p-4 rounded gap-2 text-white'>
+        <GooglePlayLogo size={32} weight="bold" color='#fff' />
+        <p>Baixe nosso app</p>
       </div>
     </div>
   )
