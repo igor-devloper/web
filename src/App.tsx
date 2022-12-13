@@ -6,7 +6,7 @@ import { Logo } from './components/Logo'
 import { GameBanner } from './components/GameBanner';
 import { CreateAdBanner } from './components/CreateAdBanner';
 import { CreateAdModal } from './components/CreateAdModal';
-import { GooglePlayLogo } from 'phosphor-react';
+import { GooglePlayLogo, WhatsappLogo } from 'phosphor-react';
 import FlatList from 'flatlist-react';
 import { GameBannerResp } from './components/GameBannerResp';
 import { CreateAdBannerResp } from './components/CreateAdBannerResp';
@@ -74,9 +74,17 @@ function App() {
           <CreateAdModal />
         </div>
       </Dialog.Root>
-      <div className='flex  items-center mt-8 bg-[#2A2634] p-4 rounded gap-2 text-white'>
-        <GooglePlayLogo size={32} weight="bold" color='#fff' />
-        <p>Baixe nosso app</p>
+      <div className='flex gap-4'>
+        <div className='flex  items-center mt-8 bg-[#2A2634] p-4 rounded gap-2 text-white'>
+          <GooglePlayLogo size={32} weight="bold" color='#fff' />
+          <p>Baixe nosso app</p>
+        </div>
+        <a href="">
+          <div className='flex  items-center mt-8 bg-[#2A2634] p-4 rounded gap-2 text-white'>
+            <WhatsappLogo size={32} weight="regular" color='#fff' />
+            <p>Entre em contato com <br></br> nossos guias turísticos</p>
+          </div>
+        </a>
       </div>
     </div>
   )

@@ -19,7 +19,7 @@ interface Game {
 
 export function CreateAdModal() {
   const [weekDays, setWeekDays] = useState<string[]>([])
-  const [attractions, setAttractions] = useState<Game[]>([])
+  const [attractions, setAttractions] = useState<Game[]>([])  
   const [selectedFile, setSelectedFile] = useState<File[]>([])
   const [useVoiceChannel, setUseVoiceChannel] = useState(false);
   useEffect(() => {
